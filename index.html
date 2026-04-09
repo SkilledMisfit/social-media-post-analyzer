@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PostAnalyzer | Predict Your Success</title>
+    <!-- Favicon -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90' fill='%23D4AF37' font-family='serif'>P</text></svg>">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,500;0,700;1,400&family=Inter:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap" rel="stylesheet">
+    
+    <!-- External Stylesheet -->
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+    <div class="ambient-light light-1"></div>
+    <div class="ambient-light light-2"></div>
+    <div class="dimmer" id="dimmer"></div>
+    <div id="toast" class="toast"></div>
+
+    <!-- The Simulator Modal -->
+    <div class="simulator-modal" id="sim-modal">
+        <div class="phone-frame">
+            <div class="phone-notch"></div>
+            <div class="phone-header">
+                <div class="phone-profile"></div>
+                <div class="phone-name-block">
+                    <span class="phone-name">You</span>
+                    <span class="phone-bio" id="sim-platform-hint">Just now • LinkedIn</span>
+                </div>
+            </div>
+            <div class="phone-content" id="sim-content">
+                <!-- Data injected via JS -->
+            </div>
+        </div>
+        
+        <div class="sim-controls">
+            <h3>The "Glance" Test</h3>
+            <p>80% of users scroll on mobile. Social apps truncate your post and hide your hook behind a "...see more" button.</p>
+            <p style="color: var(--accent)">We have mathematically sliced your text below to show exactly where the cutoff happens on <strong id="sim-label">LinkedIn</strong>.</p>
+            
+            <label class="bionic-toggle">
+                <input type="checkbox" id="toggle-bionic">
+                Enable Bionic Reading Format
+            </label>
+            <p style="font-size: 11px; margin-top:0;">(Highlights the first letters to guide the ADHD eye faster).</p>
+            
+            <button class="btn-close-sim" id="btn-close-sim">Close Viewport</button>
+        </div>
+    </div>
+
+    <header class="masthead">
+        <div class="masthead-logo">PostAnalyzer</div>
+        <div class="masthead-divider"></div>
+        <div class="masthead-subtitle">The Pre-Flight Check for Social Media</div>
+    </header>
+
+    <div class="welcome-banner">
+        <h1 class="welcome-title">Will your post actually work?</h1>
+        <p class="welcome-subtitle">Stop guessing. Paste your draft below to instantly score its potential to grab attention or generate sales before you hit publish.</p>
+    </div>
+
+    <div class="mode-toggle-wrapper">
+        <span class="mode-label active" id="label-brand" onclick="document.getElementById('toggle-ecom').click()">GROW AUDIENCE (Content)</span>
+        <label class="switch">
+            <input type="checkbox" id="toggle-ecom" aria-label="Toggle Tool Mode">
+            <span class="slider"></span>
+        </label>
+        <span class="mode-label" id="label-ecom" onclick="document.getElementById('toggle-ecom').click()">SELL PRODUCTS (E-commerce)</span>
+    </div>
+
+    <main class="main-content">
+        <section class="glass-panel" id="input-section">
+            <div class="section-label">
+                <div class="title-left">Paste Your Draft Post</div>
+                <label class="heatmap-toggle-wrapper" id="heatmap-toggle-wrapper" style="display:none; cursor:pointer;">
+                    <div class="heat-dot"></div> Live Heatmap
+                    <input type="checkbox" id="toggle-heatmap" checked style="display:none;">
+                </label>
+            </div>
+            
+            <div class="platform-pills" id="platform-tabs">
+                <button class="pill active" data-platform="LinkedIn" aria-pressed="true">LinkedIn</button>
+                <button class="pill" data-platform="Instagram" aria-pressed="false">Instagram</button>
+                <button class="pill" data-platform="Facebook" aria-pressed="false">Facebook</button>
+                <button class="pill" data-platform="X" aria-pressed="false">X / Twitter</button>
+                <button class="pill" data-platform="YouTube" aria-pressed="false">YouTube</button>
+            </div>
+            
+            <div class="editor-container" id="editor-container">
+                <div class="scan-line" id="scan-line"></div>
+                <!-- Heatmap Overlay -->
+                <div id="heatmap-overlay" class="overlay-display" style="z-index: 1;"></div>
+                <textarea id="post-input" placeholder="Type or paste your post here...&#10;&#10;e.g. 'I was rejected from 12 companies before I learned this secret...'" aria-label="Post Input"></textarea>
+                <!-- Scanner Animation Overlay (Moved to z-index 3 when active) -->
+                <div id="overlay-display" class="overlay-display" style="z-index: 3;"></div>
+            </div>
+            
+            <div class="controls-row">
+                <button class="btn-demo" id="btn-demo">Try a Demo Post</button>
+                <div class="char-count" id="char-count">0 characters</div>
+            </div>
+
+            <div class="action-flex">
+                <button class="btn-preview" id="btn-preview" disabled>Preview On Mobile</button>
+                <button class="btn-analyze" id="btn-analyze" disabled>Grade My Post</button>
+            </div>
+        </section>
+
+        <!-- Briefing Sidebar -->
+        <aside class="briefing-card">
+            <h2 class="briefing-title" id="briefing-title">How we grade posts</h2>
+            <ul class="tips-list" id="briefing-bullets"></ul>
+        </aside>
+    </main>
+
+    <!-- Results Dashboard -->
+    <section class="results-section" id="results-section">
+        <div class="verdict-banner"><div class="verdict-headline" id="verdict-headline">RESULTS PLACEHOLDER</div></div>
+        <div style="max-width: 1400px; margin: 0 auto;">
+            <div class="score-board">
+                <div class="score-giant">
+                    <div class="score-number" id="overall-score">0</div>
+                    <div class="score-max">/100</div>
+                </div>
+                <div class="score-meta"><div class="editorial-summary" id="editorial-summary">Analysis complete.</div></div>
+            </div>
+            <div class="metrics-grid" id="metrics-container"></div>
+            <div class="actions-bar">
+                <button class="act-btn" id="btn-new">Check Another Post</button>
+                <button class="act-btn" id="btn-copy">Copy Full Report</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- External Script -->
+    <script src="js/app.js"></script>
+</body>
+</html>
